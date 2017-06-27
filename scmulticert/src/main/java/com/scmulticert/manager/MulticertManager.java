@@ -1,15 +1,21 @@
 package com.scmulticert.manager;
 
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.geonames.Toponym;
-import org.geonames.ToponymSearchResult;
-import org.geonames.WebService;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
+
 import org.springframework.stereotype.Service;
 
+import com.scmulticert.bean.GeoNameCountryInfoBean;
 import com.scmulticert.ws.bean.ServiceConfig;
 import com.scmulticert.ws.external.http.HttpConnection;
 
@@ -19,21 +25,25 @@ public class MulticertManager implements IMulticertManager {
 	@Override
 	public void getCountryInfo(String countryCode) throws Exception {
 
-		WebService.setUserName("bandrade"); // add your username here
-		ToponymSearchResult searchResult = WebService.search("", "PT", "", new String[] {}, 1);
-		for (Toponym toponym : searchResult.getToponyms()) {
-		     System.out.println(toponym.getName()+" "+ toponym.getCountryName());
-		  }
-
 		HttpConnection httpConn = new HttpConnection();
-		StringBuilder response = httpConn.sendGet("http://api.geonames.org/countryInfo?lang=pt&country=PT&username=bandrade&style=full");// this.buildUrl(league, i, requestRound).toString());
+		StringBuilder response = httpConn.sendGet("http://api.geonames.org/countryInfo?lang=pt&country="+countryCode+"&username=bandrade&style=full");
+
+		Reader reader = new StringReader(response.toString());
+		XMLInputFactory factory = XMLInputFactory.newInstance();
+		XMLStreamReader xmlReader = factory.createXMLStreamReader(reader);
+		xmlReader.nextTag();
+		xmlReader.nextTag();
+
+		JAXBContext jc = JAXBContext.newInstance(GeoNameCountryInfoBean.class);
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		JAXBElement<GeoNameCountryInfoBean> je = unmarshaller.unmarshal(xmlReader, GeoNameCountryInfoBean.class);
 
 		System.out.println(response);
-		
-		
 //		ExecutorService executor = Executors.newFixedThreadPool(4);
+//		
 //
 //		Future<GenericResponse> response = executor.submit(new ExternalServiceCaller(this.getCountryInfoConfig(countryCode)));
+//		executor.shutdown();
 
 	}
 
