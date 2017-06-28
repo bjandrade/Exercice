@@ -1,6 +1,8 @@
 package com.scmulticert.manager;
 
+import com.scmulticert.bean.MulticertResponse;
+
 public interface IMulticertManager {
 
-	public void getCountryInfo(String countryCode) throws Exception;
+	public MulticertResponse getCountryInfo(String countryCode) throws Exception;
 }

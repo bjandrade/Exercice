@@ -1,19 +1,14 @@
 package com.scmulticert.ws.task;
 
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
 import java.util.concurrent.Callable;
 
-import org.geonames.Toponym;
-import org.geonames.ToponymSearchCriteria;
-import org.geonames.ToponymSearchResult;
-import org.geonames.WebService;
+import com.scmulticert.ws.external.bean.ServiceConfig;
+import com.scmulticert.ws.external.http.HttpConnection;
 
-import com.scmulticert.ws.bean.GenericResponse;
-import com.scmulticert.ws.bean.ServiceConfig;
+public class ExternalServiceCaller implements Callable<String>{
 
-public class ExternalServiceCaller implements Callable<GenericResponse>{
-
+	private static final String GEONAME_URL = "http://api.geonames.org/";
 	private ServiceConfig serviceConfig;
 
 	public ExternalServiceCaller(ServiceConfig serviceConfig) {
@@ -21,36 +16,45 @@ public class ExternalServiceCaller implements Callable<GenericResponse>{
 	}
 
 	@Override
-	public GenericResponse call() throws Exception {
+	public String call() throws IOException {
 
-		WebService.setUserName("bandrade"); // add your username here
-		ToponymSearchResult searchResult = WebService.search("", "PT", "", new String[] {}, 1);
-		for (Toponym toponym : searchResult.getToponyms()) {
-		     System.out.println(toponym.getName()+" "+ toponym.getCountryName());
-		  }
-		
-//		ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
-//		  searchCriteria.setQ("zurich");
-//		  ToponymSearchResult searchResult = WebService.search(searchCriteria);
-//		  for (Toponym toponym : searchResult.getToponyms()) {
-//		     System.out.println(toponym.getName()+" "+ toponym.getCountryName());
-//		  }
-		
-//		WebTarget target = this.getService(GENERIC_REST_URL + "/Configuration/Autocomplete/Country/List");
-//		Response response = target.request(MediaType.APPLICATION_JSON).buildGet().invoke();
-//		AutocompleteResponse restResponse = response.readEntity(AutocompleteResponse.class);
-//
-//		if(restResponse == null)
-//			throw new PredictionsIntegrationException("Error communicating with REST service!");
-//
-//		return restResponse.getList();
+		HttpConnection httpConn = new HttpConnection();
+		StringBuilder response = httpConn.sendGet(this.buildUrl());
 
-		
-		
-		return null;
+//		JAXBContext jaxbContext = JAXBContext.newInstance(GeoNameCountryInfoBean.class);
+//		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+//
+//		StringReader reader = new StringReader(response.toString());
+//		GeoNameCountryInfoBean countryInfoBean = (GeoNameCountryInfoBean) unmarshaller.unmarshal(reader);
+
+//		Reader reader = new StringReader(response.toString());
+//		XMLInputFactory factory = XMLInputFactory.newInstance();
+//		XMLStreamReader xmlReader = factory.createXMLStreamReader(reader);
+//		xmlReader.nextTag();
+//		xmlReader.nextTag();
+
+//		JAXBContext jc = JAXBContext.newInstance(GeoNameCountryInfoBean.class);
+//		Unmarshaller unmarshaller = jc.createUnmarshaller();
+//		JAXBElement<GeoNameCountryInfoBean> je = unmarshaller.unmarshal(xmlReader, GeoNameCountryInfoBean.class);
+//
+		System.out.println(response);
+
+//		return je.getValue();
+//		return countryInfoBean;
+		return response.toString();
 	}
 
-	private String constructParams(Map<String, List<String>> params) {
-		return null;
+
+	private String buildUrl(){
+		StringBuilder url = new StringBuilder(ExternalServiceCaller.GEONAME_URL);
+
+		url.append("/" + this.serviceConfig.getHost());
+
+		String separator = "?";
+		for(String key : this.serviceConfig.getParams().keySet()){
+			url.append(separator + key + "=" + this.serviceConfig.getParams().get(key));
+			separator = "&";
+		}
+		return url.toString();
 	}
 }

@@ -22,23 +22,18 @@ public class MulticertService {
 
 	@GET
 	@Path("/CountryInfo/{countryCode}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
 	public MulticertResponse getCountryInfo(@PathParam("countryCode") String countryCode) {
 		MulticertResponse response = new MulticertResponse();
 
 		try{
+			response = this.multicertManager.getCountryInfo(countryCode);
 
-			this.multicertManager.getCountryInfo(countryCode);
-			
-			response.setCode("SUCCESS");
-			response.setMessage(countryCode);
 			return response;
 		} catch (Exception e) {
-			response.setMessage(e.getMessage());
 			e.printStackTrace();
 		}
-		response.setCode("UNSUCCESS");
 		return response;
 	}
 }

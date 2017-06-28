@@ -1,28 +1,30 @@
-package com.scmulticert.bean;
+package com.scmulticert.ws.external.bean;
 
-import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
-public class MulticertResponse implements Serializable {
+@XmlRootElement(name = "geonames")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class GeoNameFindNearByWeatherBean extends AbstractGeoNameBean {
 
 	private static final long serialVersionUID = 1L;
 
-	private String lang;
-	private String population;
-	private String currency;
-	private String capital;
-	private String icaoCode;
+	@XmlElement(name = "observation")
+	private List<Observation> observationList;
 
-	@XmlElement
-	private List<CityWeather> weatherCityList;
+	public static class Observation {
 
-	public static class CityWeather {
-
+		private String observationTime;
 		private String stationName;
+		private String ICAO;
+		private String countryCode;
+		private String elevation;
+		private String lat;
+		private String lng;
 		private String temperature;
 		private String dewPoint;
 		private String humidity;
@@ -31,14 +33,48 @@ public class MulticertResponse implements Serializable {
 		private String hectoPascAltimeter;
 		private String windDirection;
 		private String windSpeed;
-		private String lat;
-		private String lng;
 
+		public String getObservationTime() {
+			return observationTime;
+		}
+		public void setObservationTime(String observationTime) {
+			this.observationTime = observationTime;
+		}
 		public String getStationName() {
 			return stationName;
 		}
 		public void setStationName(String stationName) {
 			this.stationName = stationName;
+		}
+		public String getICAO() {
+			return ICAO;
+		}
+		public void setICAO(String iCAO) {
+			ICAO = iCAO;
+		}
+		public String getCountryCode() {
+			return countryCode;
+		}
+		public void setCountryCode(String countryCode) {
+			this.countryCode = countryCode;
+		}
+		public String getElevation() {
+			return elevation;
+		}
+		public void setElevation(String elevation) {
+			this.elevation = elevation;
+		}
+		public String getLat() {
+			return lat;
+		}
+		public void setLat(String lat) {
+			this.lat = lat;
+		}
+		public String getLng() {
+			return lng;
+		}
+		public void setLng(String lng) {
+			this.lng = lng;
 		}
 		public String getTemperature() {
 			return temperature;
@@ -88,54 +124,12 @@ public class MulticertResponse implements Serializable {
 		public void setWindSpeed(String windSpeed) {
 			this.windSpeed = windSpeed;
 		}
-		public String getLat() {
-			return lat;
-		}
-		public void setLat(String lat) {
-			this.lat = lat;
-		}
-		public String getLng() {
-			return lng;
-		}
-		public void setLng(String lng) {
-			this.lng = lng;
-		}
 	}
 
-	public String getLang() {
-		return lang;
+	public List<Observation> getObservationList() {
+		return observationList;
 	}
-	public void setLang(String lang) {
-		this.lang = lang;
-	}
-	public String getPopulation() {
-		return population;
-	}
-	public void setPopulation(String population) {
-		this.population = population;
-	}
-	public String getCurrency() {
-		return currency;
-	}
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
-	public String getCapital() {
-		return capital;
-	}
-	public void setCapital(String capital) {
-		this.capital = capital;
-	}
-	public String getIcaoCode() {
-		return icaoCode;
-	}
-	public void setIcaoCode(String icaoCode) {
-		this.icaoCode = icaoCode;
-	}
-	public List<CityWeather> getWeatherCityList() {
-		return weatherCityList;
-	}
-	public void setWeatherCityList(List<CityWeather> weatherCityList) {
-		this.weatherCityList = weatherCityList;
+	public void setObservationList(List<Observation> observationList) {
+		this.observationList = observationList;
 	}
 }
