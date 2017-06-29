@@ -3,7 +3,6 @@ package com.scmulticert.bean;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
@@ -17,7 +16,6 @@ public class MulticertResponse implements Serializable {
 	private String capital;
 	private String icaoCode;
 
-	@XmlElement
 	private List<CityWeather> weatherCityList;
 
 	public static class CityWeather {

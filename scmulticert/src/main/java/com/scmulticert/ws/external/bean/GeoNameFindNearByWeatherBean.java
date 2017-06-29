@@ -1,7 +1,5 @@
 package com.scmulticert.ws.external.bean;
 
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
@@ -14,7 +12,7 @@ public class GeoNameFindNearByWeatherBean extends AbstractGeoNameBean {
 	private static final long serialVersionUID = 1L;
 
 	@XmlElement(name = "observation")
-	private List<Observation> observationList;
+	private Observation observation;
 
 	public static class Observation {
 
@@ -126,10 +124,10 @@ public class GeoNameFindNearByWeatherBean extends AbstractGeoNameBean {
 		}
 	}
 
-	public List<Observation> getObservationList() {
-		return observationList;
+	public Observation getObservation() {
+		return observation;
 	}
-	public void setObservationList(List<Observation> observationList) {
-		this.observationList = observationList;
+	public void setObservation(Observation observation) {
+		this.observation = observation;
 	}
 }
