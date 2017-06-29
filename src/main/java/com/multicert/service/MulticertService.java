@@ -130,8 +130,6 @@ public class MulticertService implements IMulticertService {
 			response.setWeatherCityList(weatherList);
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			e.printStackTrace();
-			// TODO: handle exception
 		}
 
 		logger.info("getCountryInfo ended...");

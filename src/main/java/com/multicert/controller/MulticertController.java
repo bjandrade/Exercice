@@ -34,11 +34,11 @@ public class MulticertController {
 	public String login(@Validated CountryDetail countryDetail, Model model) {
 		logger.info("/getInfo visited.");
 
-		MulticertResponse response = new MulticertResponse();
+		MulticertResponse response = null;
 		try {
 			response = this.service.getCountryInfo(countryDetail.getCountryCode());
 		} catch (Exception e) {
-			e.printStackTrace();
+			response = new MulticertResponse();
 		}
 
 		model.addAttribute("countryInfo", response);
