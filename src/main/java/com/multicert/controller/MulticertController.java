@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.multicert.bean.CountryDetail;
 import com.multicert.bean.MulticertResponse;
-import com.multicert.service.IMulticertService;
+import com.multicert.manager.IMulticertManager;
 
 @Controller
 public class MulticertController {
@@ -21,7 +21,7 @@ public class MulticertController {
 	private static final Logger logger = LoggerFactory.getLogger(MulticertController.class);
 
 	@Autowired
-	private IMulticertService service;
+	private IMulticertManager service;
 
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String loginPage(Locale locale, Model model) {
@@ -30,7 +30,7 @@ public class MulticertController {
 		return "index";
 	}
 
-	@RequestMapping(value = "/getInfo", method = RequestMethod.POST)
+	@RequestMapping(value = "/getInfo", method = {RequestMethod.POST, RequestMethod.GET})
 	public String login(@Validated CountryDetail countryDetail, Model model) {
 		logger.info("/getInfo visited.");
 

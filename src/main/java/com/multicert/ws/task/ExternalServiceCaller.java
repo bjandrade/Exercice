@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.multicert.ws.external.bean.ServiceConfig;
-import com.multicert.ws.external.http.HttpConnection;
+import com.multicert.ws.external.http.HttpGetConnection;
 
 public class ExternalServiceCaller implements Callable<String>{
 
@@ -23,7 +23,7 @@ public class ExternalServiceCaller implements Callable<String>{
 	@Override
 	public String call() throws IOException {
 		String url = this.buildUrl();
-		HttpConnection httpConn = new HttpConnection();
+		HttpGetConnection httpConn = new HttpGetConnection();
 		StringBuilder response = httpConn.sendGet(this.buildUrl());
 
 		logger.info("Geoname called, service: " + url);

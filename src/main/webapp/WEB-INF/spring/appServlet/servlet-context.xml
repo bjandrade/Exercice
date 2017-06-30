@@ -18,5 +18,7 @@
 
 	<context:component-scan base-package="com.multicert.controller" />
 	<context:component-scan base-package="com.multicert.service" />
+	<context:component-scan base-package="com.multicert.manager" />
+	<context:component-scan base-package="com.multicert.ws.external.request" />
 
 </beans:beans>
