@@ -38,6 +38,7 @@ public class MulticertController {
 		try {
 			response = this.service.getCountryInfo(countryDetail.getCountryCode());
 		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 			response = new MulticertResponse();
 		}
 

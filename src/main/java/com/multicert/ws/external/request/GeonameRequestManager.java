@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.multicert.exception.CitiesNotFoundException;
+import com.multicert.exception.CountryNotFoundException;
 import com.multicert.ws.external.bean.GeoNameCitiesBean;
 import com.multicert.ws.external.bean.GeoNameCountryInfoBean;
 import com.multicert.ws.external.bean.GeoNameFindNearByWeatherBean;
@@ -30,7 +32,7 @@ public class GeonameRequestManager implements IGeonameRequestManager {
 	private static final Logger logger = LoggerFactory.getLogger(GeonameRequestManager.class);
 
 	@Override
-	public GeoNameCountryInfoBean doCountryInfoRequest(ServiceConfigMappingBean mappingBean) {
+	public GeoNameCountryInfoBean doCountryInfoRequest(ServiceConfigMappingBean mappingBean) throws CountryNotFoundException {
 		ServiceConfigFactory serviceConfigFactory = ServiceConfigFactory.getServiceConfigFactory();
 
 		ServiceConfig countryConfig = serviceConfigFactory.createServiceConfig(IServiceConfigType.COUNTRY_INFO,  mappingBean);
@@ -41,6 +43,9 @@ public class GeonameRequestManager implements IGeonameRequestManager {
 
 			ExternalServiceMapper<GeoNameCountryInfoBean> countryMapper = new ExternalServiceMapper<GeoNameCountryInfoBean>(GeoNameCountryInfoBean.class);
 			GeoNameCountryInfoBean countryInfoBean = countryMapper.stringToObject(countryInfoValue);
+
+			if(countryInfoBean.getCountry() == null)
+				throw new CountryNotFoundException("Country: " + mappingBean.getCountry() + " not found");
 
 			return countryInfoBean;
 		} catch (InterruptedException | ExecutionException e) {
@@ -53,7 +58,7 @@ public class GeonameRequestManager implements IGeonameRequestManager {
 	}
 
 	@Override
-	public GeoNameCitiesBean doCitiesRequest(ServiceConfigMappingBean citiesMappingBean) {
+	public GeoNameCitiesBean doCitiesRequest(ServiceConfigMappingBean citiesMappingBean) throws CitiesNotFoundException{
 		ServiceConfigFactory serviceConfigFactory = ServiceConfigFactory.getServiceConfigFactory();
 
 		ServiceConfig citiesConfig = serviceConfigFactory.createServiceConfig(IServiceConfigType.CITIES, citiesMappingBean);
@@ -64,6 +69,9 @@ public class GeonameRequestManager implements IGeonameRequestManager {
 
 			ExternalServiceMapper<GeoNameCitiesBean> citiesMapper = new ExternalServiceMapper<GeoNameCitiesBean>(GeoNameCitiesBean.class);
 			GeoNameCitiesBean citiesBean = citiesMapper.stringToObject(citiesValue);
+
+			if(citiesBean.getCityList() == null)
+				throw new CitiesNotFoundException("Cities from country: " + citiesMappingBean.getCountry() + " not found");
 
 			return citiesBean;
 		} catch (InterruptedException | ExecutionException e) {

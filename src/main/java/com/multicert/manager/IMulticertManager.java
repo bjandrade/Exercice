@@ -4,5 +4,5 @@ import com.multicert.bean.MulticertResponse;
 
 public interface IMulticertManager {
 
-	public MulticertResponse getCountryInfo(String countryCode) throws Exception;
+	public MulticertResponse getCountryInfo(String countryCode);
 }
